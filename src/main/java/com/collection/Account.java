@@ -1,11 +1,37 @@
 package com.collection;
 
-// import java.util.Objects;
+// import lombok.Data;
 
+// import java.util.Objects;
+// @Data
 public class Account {
     private String accountNumber;
     private String owner;
     private double balance;
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 
     public Account(String accountNumber, String owner, double balance) {
         if (accountNumber == null || accountNumber.isBlank()) {
@@ -22,23 +48,16 @@ public class Account {
         this.balance = balance;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
     public void deposit(double amount) {
         if (amount <= 0 || !Double.isFinite(amount)) {
             throw new IllegalArgumentException("Deposit harus Positif");
         }
         balance += amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Account - Name: " + owner + ", Saldo: " + balance;
     }
 
     // @Override
