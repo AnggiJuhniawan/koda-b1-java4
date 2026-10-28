@@ -2,7 +2,14 @@ package com.collection;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.*;
+
+import tools.jackson.databind.ObjectMapper;
+
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -11,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 
 /**
@@ -68,13 +76,13 @@ public class App {
         // }
 
         // Lamda Expression
-        List<Account> accounts = new ArrayList<>();
+        // List<Account> accounts = new ArrayList<>();
 
-        accounts.add(new Account("ACC001", "Andi", 10000));
-        accounts.add(new Account("ACC002", "Budi", 2000_000));
-        accounts.add(new Account("ACC003", "Mandra", 20000));
+        // accounts.add(new Account("ACC001", "Andi", 10000));
+        // accounts.add(new Account("ACC002", "Budi", 2000_000));
+        // accounts.add(new Account("ACC003", "Mandra", 20000));
 
-        System.out.println("Lambda & Function Interface");
+        // System.out.println("Lambda & Function Interface");
         // accounts.forEach(account -> {
         // System.out.println(account.getAccountNumber() + " - " + account.getOwner());
         // });
@@ -136,7 +144,7 @@ public class App {
         // List<Account> sortedAccounts = accounts.stream()
         // .sorted(Comparator.comparingDouble(Account::getBalance).reversed()).toList();
         // sortedAccounts
-        // .forEach((account -> System.out.printf("%s%s : Rp %.0f%n",
+        // .forEach((account -> System.out.printf("%s : Rp %d%n",
         // account.getOwner(), account.getBalance())));
 
         // ## Reduce
@@ -152,21 +160,105 @@ public class App {
         // result.map(Account::getOwner).orElse("Tidak ditemukan"));
         // System.out.println("Test");
 
-        try {
-            Account account = findAccount(accounts, "ACC001")
-                    .orElseThrow(() -> new NoSuchElementException("Tidak ditemukan"));
-            System.out.println(account.getOwner());
-        } catch (NoSuchElementException e) {
-            System.out.println("Error : " + e.getMessage());
-        }
+        // try {
+        // Account account = findAccount(accounts, "ACC001")
+        // .orElseThrow(() -> new NoSuchElementException("Tidak ditemukan"));
+        // System.out.println(account.getOwner());
+        // } catch (NoSuchElementException e) {
+        // System.out.println("Error : " + e.getMessage());
+        // }
+
+        // Reflection
+        // showAccountMethods();
+
+        // Serialization
+        // try {
+        // Account targetAccount = new Account("ACC001", "Andi", 200_000);
+
+        // ObjectMapper objectMapper = new ObjectMapper();
+
+        // String jsonResult = objectMapper.writeValueAsString(targetAccount);
+
+        // System.out.println("======Hasil Serialization====");
+        // System.out.println(jsonResult);
+
+        // System.out.println("======Hasil Serialization (PRETTY PRINT)====");
+        // String prettJson =
+        // objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(targetAccount);
+
+        // System.out.println(prettJson);
+        // } catch (Exception e) {
+        // System.out.println("Terjadi kesalah");
+        // }
+        // try {
+        // System.out.println("Mulai Thread Tugas");
+        // demoThread();
+
+        // System.out.println("Mulai Executor Tugas");
+        // demoExecutor();
+        // System.out.println("Selesai Executor Tugas");
+        // } catch (Exception e) {
+        // System.out.println("Terjadi Kesalahan.. " + e.getMessage());
+        // }
+        // }
+
+        // Thread
+        // static void demoThread() throws InterruptedException {
+        // Thread worker = new Thread(() -> {
+        // System.out.println("Worker(Thread) sedang dijalankan");
+        // });
+        // worker.start();
+        // worker.join();
+        // System.out.println("Worker(Thread) sudah selsai!");
+        // }
+
+        // ExecutorService / ThreadPool
+        // static void demoExecutor() throws Exception {
+        // try (ExecutorService executor = Executors.newFixedThreadPool(1)) {
+        // Future<String> taskA = executor.submit(() -> {
+        // Thread.sleep(1000);
+        // return "Task A: cek Saldo Andi";
+        // });
+
+        // Future<String> taskB = executor.submit(() -> {
+        // Thread.sleep(9000);
+        // return "Task B: cek Saldo Budi";
+        // });
+
+        // System.out.println(taskA.get());
+        // System.out.println(taskB.get());
+
+        // Garbage Collection
+        System.out.println("=====DEMO JVM Memory=====");
+        demoMemory();
     }
 
+    static void demoMemory() {
+        Account temporary = new Account("TEMP", "Sementara", 0);
+
+        System.out.println("Pemilik akun: " + temporary.getOwner());
+
+        temporary = null;
+
+        System.out.println("Referensi temporary di lepas, Object bisa dibersihkan oleh Garbage Collection");
+    }
+    // }
     // Optional
     // ## orElse()
-    static Optional<Account> findAccount(
-            List<Account> accounts, String number) {
-        return accounts.stream().filter(account -> account.getAccountNumber().equals(number)).findFirst();
-    }
+    // static Optional<Account> findAccount(
+    // List<Account> accounts, String number) {
+    // return accounts.stream().filter(account ->
+    // account.getAccountNumber().equals(number)).findFirst();
+    // }
+
+    // Refrection
+    // static void showAccountMethods() {
+    // Method[] methods = Account.class.getDeclaredMethods();
+
+    // for (Method method : methods) {
+    // System.out.println("Method: " + method.getName());
+    // }
+    // }
 
     // static boolean isEligible(Account account) {
     // return account.getBalance() >= 500_000;
